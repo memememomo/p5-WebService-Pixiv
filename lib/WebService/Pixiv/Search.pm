@@ -1,6 +1,7 @@
 package WebService::Pixiv::Search;
 use strict;
 use warnings;
+use base qw(WebService::Pixiv::Base);
 use URI;
 use URI::Escape;
 use Web::Scraper;
@@ -8,51 +9,43 @@ use WebService::Pixiv::Illust;
 
 use Class::Accessor::Lite
     rw => [ qw(
-       mech
-       delay
        tags
     ) ];
 
-my $SEARCH_URI = 'http://www.pixiv.net/search.php';
 
-my @res = ();
-
-sub new {
-    my $class = shift;
-    my %args = @_ == 1 ? %{$_[0]} : @_;
-
-    bless {
-	delay => 1,
-	%args,
-    }, $class;
+sub base_uri {
+    return 'http://www.pixiv.net/search.php';
 }
 
-sub selector {
-    my $selector_size = qq|div.search_top_result > div > p|;
-    my $selector_illust_id = qq|div[class="search_a2_result linkStyleWorks"] > ul > li > a > img|;
-
-    scraper {
-	process $selector_size, size => 'TEXT',
-	process $selector_illust_id, 'illust_id[]' => '@src',
-    };
+sub pager {
+    return 20;
 }
 
-
-sub size {
+sub count {
     my ($self) = @_;
 
     my $res = $self->_get_res(0);
 
-    my $size = $res->{size};
-    my @matches = $size =~ /(\d+)/;
+    my $count = $res->{count};
+    $count =~ s/,//g;
 
-    $matches[0];
+    $count;
+}
+
+sub selector {
+    my $selector_count = q|ul.sub > li > span.count|;
+    my $selector_illust_id = q|ul[class="images autopagerize_page_element"] > li > a > p > img|;
+
+    scraper {
+	process $selector_count, count => 'TEXT',
+	process $selector_illust_id, 'illust_id[]' => '@src',
+    };
 }
 
 sub _get_content {
     my ($self, $i) = @_;
 
-    my $uri = URI->new($SEARCH_URI);
+    my $uri = URI->new($self->base_uri);
     my %query = (
 	word => join(' ', @{$self->tags}),
 	s_mode => 's_tag',
@@ -73,29 +66,11 @@ sub _get_content {
     $self->mech->content;
 }
 
-sub _get_res {
-    my ($self, $i) = @_;
+sub response {
+    my ($self, $res, $item_num) = @_;
 
-    return $res[$i] if defined $res[$i];
-
-    $res[$i] = $self->selector->scrape(
-	$self->_get_content($i), $self->mech->uri
-    );
-}
-
-sub get {
-    my ($self, $i) = @_;
-
-    return if ($i < 0 || $i >= $self->size);
-
-    my $page_num = int($i / 20);
-    my $Illust_num = $i % 20;
-
-    my $res = $self->_get_res($page_num);
-
-    my $href = $res->{illust_id}->[$Illust_num];
+    my $href = $res->{illust_id}->[$item_num];
     $href =~ /(\d+)_s/;
-
     my $id = $1;
 
     WebService::Pixiv::Illust->new(
