@@ -125,7 +125,7 @@ sub find_mypixiv {
     );
 }
 
-sub add_bookmark {
+sub bookmark_user {
     my ($self, $user_id, $restrict) = @_;
     $restrict ||= 0;
 
