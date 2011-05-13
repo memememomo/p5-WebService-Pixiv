@@ -8,6 +8,7 @@ use Class::Accessor::Lite
     rw => [ qw(
 	    mech
 	    delay
+            my_user_id
 	    id
             res
     ) ];

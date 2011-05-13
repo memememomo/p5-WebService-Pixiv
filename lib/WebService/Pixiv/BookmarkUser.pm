@@ -15,8 +15,17 @@ sub pager {
 }
 
 sub selector {
-    my $selector_count = qq|div.two_column_space > h3 > span|;
-    my $selector_user_id = qq|li.list_person > a|;
+    my $self = shift;
+
+    my ($selector_count, $selector_user_id);
+
+    if ($self->id == $self->my_user_id) {
+	$selector_count = qq|div.count|;
+    } else {
+	$selector_count = qq|div.two_column_space > h3 > span|;
+    }
+
+    $selector_user_id = qq|li.list_person > a|;
 
     scraper {
 	process $selector_count, count => 'TEXT',

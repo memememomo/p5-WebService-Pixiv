@@ -15,8 +15,16 @@ sub pager {
 }
 
 sub selector {
-    my $selector_count = qq|div.two_column_body > h3 > span|;
-    my $selector_illust_id = qq|li[id^="li_"] > a|;
+    my $self = shift;
+
+    my ($selector_count, $selector_illust_id);
+    if ($self->id == $self->my_user_id) {
+	$selector_count = qq|div.two_column_top3 > h3 > span|;
+	$selector_illust_id = qq|li[id^="li_"] > a|;
+    } else {
+	$selector_count = qq|div.two_column_body > h3 > span|;
+	$selector_illust_id = qq|li[id^="li_"] > a|;
+    }
 
     scraper {
 	process $selector_count, count => 'TEXT',

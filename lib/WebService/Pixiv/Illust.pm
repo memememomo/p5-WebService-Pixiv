@@ -68,7 +68,7 @@ sub res {
 
     my $selector_img   = qq|div.works_display > a > img|;
     my $selector_title = qq|div.works_data > h3|;
-    my $selector_tags  = qq|span#tags > a|;
+    my $selector_tags  = qq|span#tags > a[href^="tags.php"]|;
     my $selector_desc  = qq|p.works_caption|;
 
     scraper {

@@ -91,6 +91,7 @@ sub find_member_illust {
     WebService::Pixiv::MemberIllust->new(
 	mech => $self->mech,
 	id   => $user_id,
+	my_user_id => $self->user_id,
     );
 }
 
@@ -100,6 +101,7 @@ sub find_bookmark_illust {
     WebService::Pixiv::BookmarkIllust->new(
 	mech => $self->mech,
 	id   => $user_id,
+	my_user_id => $self->user_id,
     );
 }
 
@@ -109,6 +111,7 @@ sub find_bookmark_user {
     WebService::Pixiv::BookmarkUser->new(
 	mech => $self->mech,
 	id   => $user_id,
+	my_user_id => $self->user_id,
     );
 }
 
@@ -118,6 +121,7 @@ sub find_mypixiv {
     WebService::Pixiv::MyPixiv->new(
 	mech => $self->mech,
 	id   => $user_id,
+	my_user_id => $self->user_id,
     );
 }
 
