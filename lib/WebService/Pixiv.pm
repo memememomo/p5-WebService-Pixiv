@@ -167,15 +167,72 @@ __END__
 
 =head1 NAME
 
-WebService::Pixiv -
+WebService::Pixiv - pixiv scraper.
 
 =head1 SYNOPSIS
 
   use WebService::Pixiv;
 
+
+  # login
+  my $client = WebService::Pixiv->new(
+    pixiv_id => 'your pixiv id',
+    password => 'your password',
+  );
+
+
+  # user id
+  my $my_user_id = $client->user_id;
+
+
+  # illust infomation
+  my $illust_info = $client->illust_info($illust_id);
+  $illust_info->title;
+  $illust_info->description;
+  $illust_info->tags;
+  $illust_info->thumbnail;
+  $illust_info->illust;
+
+
+  # tag search
+  my @tags = qw(巴マミ);
+  my $search_illust = $client->search_illust(@tags);
+
+
+  # number of illusts
+  $search_illust->count;
+
+
+  # first one
+  my $illust_info = $search_illust->get(0);
+
+
+  # search using some tags
+  my @tags = qw(巴マミ charlotte);
+  my $search_illust = $client->search_illust(@tags);
+
+
+  # uploaded illusts for $user_id
+  my $member_illust = $client->find_member($user_id);
+  my $illust_info = $member_illust->get(0);
+
+
+  # bookmarked illusts for $user_id
+  my $bookmark_illust = $client->find_bookmark_illust($user_id);
+  my $illust_info = $bookmark_illust->get(0);
+
+
+  # mypixiv
+  my $mypixiv = $client->find_mypixiv($user_id);
+  my $user_id = $mypixiv->get(0);
+
+
+  # bookmark user (0:public、1:private)
+  $client->bookmark_user($user_id, 0);
+
 =head1 DESCRIPTION
 
-WebService::Pixiv is
+WebService::Pixiv is a pixiv scraper.
 
 =head1 AUTHOR
 

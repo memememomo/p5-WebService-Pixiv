@@ -2,19 +2,11 @@ This is Perl module WebService::Pixiv.
 
 INSTALLATION
 
-WebService::Pixiv installation is straightforward. If your CPAN shell is set up,
+WebService::Pixiv installation is straightforward.
 you should just be able to do
 
-    % cpan WebService::Pixiv
-
-Download it, unpack it, then build it as per the usual:
-
-    % perl Makefile.PL
-    % make && make test
-
-Then install it:
-
-    % make install
+    % git clone git@github.com:memememomo/p5-WebService-Pixiv.git
+    % cpanm ./p5-WebService-Pixiv
 
 DOCUMENTATION
 
