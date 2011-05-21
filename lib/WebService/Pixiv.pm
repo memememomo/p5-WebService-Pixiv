@@ -154,6 +154,12 @@ sub search_illust {
     );
 }
 
+sub download {
+    my ($self, $illust_id, $page) = @_;
+    my $illust_info = $self->illust_info($illust_id);
+    $illust_info->download($page);
+}
+
 sub _check_res {
     my ($self) = @_;
     if ( ! $self->mech->res->is_success ) {
@@ -174,60 +180,70 @@ WebService::Pixiv - pixiv scraper.
   use WebService::Pixiv;
 
 
-  # login
+  ### login
   my $client = WebService::Pixiv->new(
     pixiv_id => 'your pixiv id',
     password => 'your password',
   );
 
 
-  # user id
+  ### user id
   my $my_user_id = $client->user_id;
 
 
-  # illust infomation
+  ### illust infomation
   my $illust_info = $client->illust_info($illust_id);
   $illust_info->title;
   $illust_info->description;
   $illust_info->tags;
   $illust_info->thumbnail;
   $illust_info->illust;
+  $illust_info->download;
+
+  # manga mode
+  $illust_info->page_count;
+  $illust_info->illust($page);
+  $illust_info->download($page);
 
 
-  # tag search
-  my @tags = qw(巴マミ);
-  my $search_illust = $client->search_illust(@tags);
+  ### download illust
+  $http_response = $client->download($illust_id);
 
 
-  # number of illusts
+  ### tag search
+  @tags = qw(巴マミ);
+  $search_illust = $client->search_illust(@tags);
+
+
+  ### number of illusts
   $search_illust->count;
 
 
-  # first one
-  my $illust_info = $search_illust->get(0);
+  ### first one
+  $illust_info = $search_illust->get(0);
 
 
-  # search using some tags
-  my @tags = qw(巴マミ charlotte);
-  my $search_illust = $client->search_illust(@tags);
+  ### search using some tags
+  @tags = qw(巴マミ charlotte);
+  $search_illust = $client->search_illust(@tags);
 
 
-  # uploaded illusts for $user_id
-  my $member_illust = $client->find_member($user_id);
-  my $illust_info = $member_illust->get(0);
+  ### uploaded illusts for $user_id
+  $member_illust = $client->find_member($user_id);
+  $illust_info = $member_illust->get(0);
 
 
-  # bookmarked illusts for $user_id
-  my $bookmark_illust = $client->find_bookmark_illust($user_id);
-  my $illust_info = $bookmark_illust->get(0);
+  ### bookmarked illusts for $user_id
+  $bookmark_illust = $client->find_bookmark_illust($user_id);
+  $illust_info = $bookmark_illust->get(0);
 
 
-  # mypixiv
-  my $mypixiv = $client->find_mypixiv($user_id);
-  my $user_id = $mypixiv->get(0);
+  ### mypixiv
+  $mypixiv = $client->find_mypixiv($user_id);
+  $user_id = $mypixiv->get(0);
 
 
-  # bookmark user (0:public、1:private)
+  ### bookmark user (0:public、1:private)
   $client->bookmark_user($user_id, 0);
 
 =head1 DESCRIPTION
