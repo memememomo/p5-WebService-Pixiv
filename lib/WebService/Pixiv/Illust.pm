@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use URI;
 use Web::Scraper;
+use WebService::Pixiv::Illust::BookmarkDetail;
 use Class::Accessor::Lite
     rw => [ qw(
        mech
@@ -71,6 +72,14 @@ sub tags {
 sub description {
     my ($self) = @_;
     $self->res->{desc};
+}
+
+sub bookmark_detail {
+    my ($self) = @_;
+    WebService::Pixiv::Illust::BookmarkDetail->new(
+	mech      => $self->mech,
+	illust_id => $self->{id},
+    );
 }
 
 sub download {
