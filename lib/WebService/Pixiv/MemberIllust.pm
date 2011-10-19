@@ -14,6 +14,19 @@ sub pager {
     return 20;
 }
 
+sub illust_id {
+    my ($self, $illust_id) = @_;
+
+    my @list;
+    for my $href ( @{ $illust_id } ) {
+	if ( $href =~ /member_illust\.php/ ) {
+	    push @list, $href;
+	}
+    }
+
+    return \@list;
+}
+
 sub selector {
     my $self = shift;
 
@@ -32,10 +45,11 @@ sub selector {
     };
 }
 
+
 sub response {
     my ($self, $res, $item_num) = @_;
 
-    my $href = $res->{illust_id}->[$item_num];
+    my $href = $self->illust_id($res->{illust_id})->[$item_num];
     $href =~ /illust_id=(\d+)/;
 
     my $id = $1;
