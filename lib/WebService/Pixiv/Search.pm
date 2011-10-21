@@ -38,7 +38,7 @@ sub selector {
 
     scraper {
 	process $selector_count, count => 'TEXT',
-	process $selector_illust_id, 'illust_id[]' => '@src',
+	process $selector_illust_id, 'illust_id[]' => '@data-src',
     };
 }
 
